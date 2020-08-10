@@ -16,6 +16,7 @@ class UniversityInfo(postgres_db.Model):
 
     def to_json(self):
         return_dict = {}
+        return_dict['id'] = self.id
         return_dict['alpha_two_code'] = self.alpha_two_code
         return_dict['country'] = self.country
         return_dict['domain'] = self.domain
