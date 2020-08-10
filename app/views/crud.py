@@ -7,6 +7,7 @@ from app.extensions import postgres_db
 
 import traceback
 import datetime
+import json
 
 crud_blueprint = Blueprint('crud', __name__)
 
@@ -25,19 +26,28 @@ def create():
         postgres_db.session.add(entry)
         postgres_db.session.commit()
 
-        return entry.to_json()
+        return json.dumps([entry.to_json()])
     except:
         postgres_db.session.rollback()
         traceback.print_exc()
         return "Something went wrong"
         
+@crud_blueprint.route('/read', methods=["GET"])
 @crud_blueprint.route('/read/<int:record_id>', methods=["GET"])
-def read(record_id):
+def read(record_id=None):
     try:
-        row = UniversityInfo.query.get(record_id)
+        if not record_id:
+            row = UniversityInfo.query.all()
+            response = list()
+            for i in row:
+                response.append(i.to_json()) 
+            postgres_db.session.commit()
+            return json.dumps(response)
+        else:
+            row = UniversityInfo.query.get(record_id)
         postgres_db.session.commit()
         
-        return row.to_json()
+        return json.dumps([row.to_json()])
     except:
         postgres_db.session.rollback()
         traceback.print_exc()
@@ -52,7 +62,7 @@ def update(record_id):
         row.update(request_json)
         postgres_db.session.commit()
 
-        return row.first().to_json()
+        return json.dumps([row.first().to_json()])
     except:
         postgres_db.session.rollback()
         traceback.print_exc()
@@ -66,7 +76,7 @@ def delete(record_id):
         row.delete()
         postgres_db.session.commit()
 
-        return return_dict
+        return json.dumps([return_dict])
     except:
         postgres_db.session.rollback()
         traceback.print_exc()
