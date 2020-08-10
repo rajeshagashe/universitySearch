@@ -47,7 +47,9 @@ def view():
             query += """AND
                             domain ~ {}""".format(domains)
 
-
+        offset = int(request_json.get('offset', '0'))
+        limit = int(request_json.get('limit', '10'))
+        query += ''' limit {} offset {}'''.format(limit, offset) 
         result = postgres_db.session.execute(query)
 
         for each in result:
@@ -59,7 +61,7 @@ def view():
             aux_dict['name'] = each[4]
             aux_dict['web_page'] = each[5]
             return_list.append(aux_dict)
-            
+        
         return json.dumps(return_list)
 
     except:
