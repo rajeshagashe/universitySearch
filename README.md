@@ -9,7 +9,9 @@ $ git clone https://github.com/rajeshagashe/universitySearch.git
 $ cd universitySearch
 $ pipenv shell
 $ pipenv install -r requirements.txt
-update db url in env.example
+```
+update database url in env.example
+```sh
 $ mv env.example .env
 $ export FLASK_APP=app
 
