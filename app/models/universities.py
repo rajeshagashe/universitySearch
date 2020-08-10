@@ -14,10 +14,12 @@ class UniversityInfo(postgres_db.Model):
     created_at = postgres_db.Column(postgres_db.DateTime, default=datetime.datetime.now)
     updated_at = postgres_db.Column(postgres_db.DateTime, default=datetime.datetime.now)
 
-    def save(self, *args, **kwargs):
-        """Triggered when the document is saved, updates the fields"""
-        print('_____________________________________________')
-        if not self.created_at:
-            self.created_at = datetime.datetime.now()
-        self.updated_at = datetime.datetime.now()
-        super().save()
+    def to_json(self):
+        return_dict = {}
+        return_dict['alpha_two_code'] = self.alpha_two_code
+        return_dict['country'] = self.country
+        return_dict['domain'] = self.domain
+        return_dict['name'] = self.name
+        return_dict['web_page'] = self.web_page
+
+        return return_dict
