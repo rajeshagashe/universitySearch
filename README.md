@@ -58,9 +58,9 @@ method - DELETE
 5. /search/universities
  method - POST
  body - {
-'name': 'str'
-'country_codes': ['str']
-'domains': ['str']
-'limit': 'int'
+'name': 'str',
+'country_codes': ['str'],
+'domains': ['str'],
+'limit': 'int',
 'offset': 'int'
 }
