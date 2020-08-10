@@ -35,11 +35,11 @@ $flask run
 1. /crud/create
     method - POST
     body - {
-"alpha_two_code": "US",
-"country": "United States",
-"domain": "acu.edu",
-"name": "Abilene Christian University",
-"web_page": "http://www.acu.edu/"
+"alpha_two_code": 'str',
+"country": 'str',
+"domain": 'str',
+"name": 'str',
+"web_page": 'str'
 }
 
 2. /crud/read/<record_id>  (for one record)
