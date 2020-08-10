@@ -52,7 +52,7 @@ body - {
     key : value,
 }
 
-4. /crud/delete/<int:record_id> <br />
+4. /crud/delete/<record_id> <br />
 method - DELETE <br />
 
 5. /search/universities <br />
