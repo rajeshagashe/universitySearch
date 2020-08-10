@@ -32,9 +32,9 @@ $flask run
 
 ### End-Points
 
-1. /crud/create
-    method - POST
-    body - {
+1. /crud/create <br />
+    method - POST <br />
+    body - { 
 "alpha_two_code": 'str',
 "country": 'str',
 "domain": 'str',
@@ -42,21 +42,21 @@ $flask run
 "web_page": 'str'
 }
 
-2. /crud/read/<record_id>  (for one record)
-/crud/read  (for all records)
-method - GET
+2. /crud/read/<record_id>  (for one record) <br />
+/crud/read  (for all records) <br />
+method - GET <br />
 
-3. /crud/update/<record_id> 
-method - PATCH
-body - {
+3. /crud/update/<record_id> <br /> 
+method - PATCH <br />
+body - { 
     key : value,
 }
 
-4. /crud/delete/<int:record_id>
-method - DELETE
+4. /crud/delete/<int:record_id> <br />
+method - DELETE <br />
 
-5. /search/universities
- method - POST
+5. /search/universities <br />
+ method - POST <br />
  body - {
 'name': 'str',
 'country_codes': ['str'],
