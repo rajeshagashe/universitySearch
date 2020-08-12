@@ -46,11 +46,9 @@ def read(record_id=None):
             return json.dumps(response)
         else:
             row = UniversityInfo.query.get(record_id)
-        postgres_db.session.commit()
         
         return json.dumps([row.to_json()])
     except:
-        postgres_db.session.rollback()
         traceback.print_exc()
         return "Something went wrong"
 

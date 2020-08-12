@@ -19,8 +19,8 @@ def view():
         name = request_json.get('name', '') 
         alpha_two_codes = request_json.get('country_codes', []) 
         domains = request_json.get('domains', [])
-        offset = int(request.json.get('offset', '0'))
-        limit = int(request.json.get('limit', '10'))
+        offset = int(request_json.get('offset', '0'))
+        limit = int(request_json.get('limit', '10'))
         
         search = "%{}%".format(name)
         response = UniversityInfo.query.filter(UniversityInfo.name.like(search))   
@@ -35,11 +35,9 @@ def view():
 
         for each in response.all():
             return_list.append(each.to_json())
-        postgres_db.session.commit()
         
         return json.dumps(return_list)
 
     except:
-        postgres_db.session.rollback()
         traceback.print_exc()
         return 'Something went wrong.'
