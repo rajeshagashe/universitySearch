@@ -8,8 +8,6 @@ from app.extensions import postgres_db
 import traceback
 import json
 
-from flask_sqlalchemy import SQLAlchemy
-
 search_blueprint = Blueprint('search', __name__)
 
 @search_blueprint.route('/universities', methods=["POST"])
@@ -17,53 +15,31 @@ def view():
     try:
         return_list = []
         request_json = request.get_json()
+
+        name = request_json.get('name', '') 
+        alpha_two_codes = request_json.get('country_codes', []) 
+        domains = request_json.get('domains', [])
+        offset = int(request.json.get('offset', '0'))
+        limit = int(request.json.get('limit', '10'))
         
-        query = """ Select  
-                        * from university_info
-                    Where 
-                        name like \'%{}%\' 
-                """.format(request_json.get('name', ''),)
-
+        search = "%{}%".format(name)
+        response = UniversityInfo.query.filter(UniversityInfo.name.like(search))   
         
-        if request_json.get('country_codes', False):
-            alpha_two_codes = '('
-            for each in request_json.get('country_codes'):
-                alpha_two_codes += '\'' + str(each) + '\'' ','
-            if alpha_two_codes[-1] == ',':
-                alpha_two_codes = alpha_two_codes[:-1]
-            alpha_two_codes += ')'
-            
-            query += """AND
-                            alpha_two_code in {}""".format(alpha_two_codes)
+        if domains:
+            response = response.filter(UniversityInfo.sub_domain.in_(set(domains)))
 
-        if request_json.get('domains', False):
-            domains = '\'('
-            for each in request_json.get('domains'):
-                domains += str(each) + '|'
-            if domains[-1] == '|':
-                domains = domains[:-1]
-            domains += ')\''
+        if alpha_two_codes:
+            response = response.filter(UniversityInfo.alpha_two_code.in_(set(alpha_two_codes)))
 
-            query += """AND
-                            domain ~ {}""".format(domains)
+        response = response.offset(offset).limit(limit)
 
-        offset = int(request_json.get('offset', '0'))
-        limit = int(request_json.get('limit', '10'))
-        query += ''' limit {} offset {}'''.format(limit, offset) 
-        result = postgres_db.session.execute(query)
-
-        for each in result:
-            aux_dict = {}
-            aux_dict['id'] = each[0]
-            aux_dict['alpha_two_code'] = each[1]
-            aux_dict['country'] = each[2]
-            aux_dict['domain'] = each[3]
-            aux_dict['name'] = each[4]
-            aux_dict['web_page'] = each[5]
-            return_list.append(aux_dict)
+        for each in response.all():
+            return_list.append(each.to_json())
+        postgres_db.session.commit()
         
         return json.dumps(return_list)
 
     except:
+        postgres_db.session.rollback()
         traceback.print_exc()
         return 'Something went wrong.'
