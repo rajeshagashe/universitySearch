@@ -1,3 +1,4 @@
+# to do - manage http status codes
 from flask import (
     Blueprint, request
 )
@@ -61,6 +62,8 @@ def update(record_id):
             domain = request_json.get('domain')
             request_json['sub_domain'] = get_sub_domain(domain)
 
+        if request_json.get("id", False):
+            request_json.pop("id") # id must not be updated.
         row = UniversityInfo.query.filter_by(id=record_id)
         row.update(request_json)
         postgres_db.session.commit()
@@ -90,4 +93,3 @@ def delete(record_id):
 def get_sub_domain(domain):
     sub_domain = '.' + domain.split('.')[-1]
     return sub_domain
-

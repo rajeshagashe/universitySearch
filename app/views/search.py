@@ -1,3 +1,4 @@
+# to do - manage http status codes
 from flask import (
     Blueprint, request
 )
@@ -13,6 +14,9 @@ search_blueprint = Blueprint('search', __name__)
 @search_blueprint.route('/universities', methods=["POST"])
 def view():
     try:
+        # to do - change method to GET
+        # figure how to send list from a url param
+        # read keys from url params
         return_list = []
         request_json = request.get_json()
 
