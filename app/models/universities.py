@@ -6,6 +6,7 @@ class UniversityInfo(postgres_db.Model):
     alpha_two_code = postgres_db.Column(postgres_db.String())
     country = postgres_db.Column(postgres_db.String())
     domain = postgres_db.Column(postgres_db.String())
+    sub_domain = postgres_db.Column(postgres_db.String())
     name = postgres_db.Column(postgres_db.String())
     web_page = postgres_db.Column(postgres_db.String())
 
